@@ -1,12 +1,12 @@
-import command
-import os
-import hashlib
+import bean
 import moviepy.editor as mp
-import cv2
-import sys
+import cv2, playsound
+import sys, os, threading, time, hashlib
+
 
 max_height_size = 30
 max_width_size = 90
+
 
 # 下载视频
 def down(url, output_dir, video_name=''):
@@ -16,7 +16,7 @@ def down(url, output_dir, video_name=''):
 
     # 使用you-get下载
     you_get_path = os.path.join(os.getcwd(), 'dependency', 'you-get', 'you-get')
-    cmd = command.CommandBuilder(sys.executable)
+    cmd = bean.CommandBuilder(sys.executable)
     cmd.add_arg(you_get_path)
     cmd.add_args('-o', output_dir).add_args('-O', video_name).add_arg(url)
     cmd.execute()
@@ -54,6 +54,7 @@ def make_char_video(video_full_path):
         return 0
 
     asc = '@&%#*+=-. '
+    asc_num = len(asc) - 1
     frames = []
     frame_count = 0
     resize_scale = 1
@@ -62,8 +63,7 @@ def make_char_video(video_full_path):
         # 提取每一帧
         ret_val, image = video.read()
         if ret_val:
-
-            print('\r\t正在处理第' + str(frame_count) + '帧', end='', flush=True)
+            print('\r\t正在处理第{}帧'.format(str(frame_count)), end='', flush=True)
             frame_count += 1
 
             # 图片转化为灰度，并缩放
@@ -87,7 +87,7 @@ def make_char_video(video_full_path):
             for row in range(x):
                 for col in range(y):
                     gray = gray_img[row, col]
-                    text += asc[int((255 - gray) / 255 * 9)]
+                    text += asc[int((255 - gray) / 255 * asc_num)]
                 text += '\n'
             frames.append(text)
 
@@ -96,3 +96,16 @@ def make_char_video(video_full_path):
             print('\n')
             break
     return frames
+
+
+def play_char_video(char_video, sound_file, duration_time, fps=15):
+    frame_number = len(char_video)
+    sound_thread = threading.Thread(target=playsound.playsound, args=(sound_file,))
+    sound_thread.start()
+    start_time = time.time()
+    while time.time() - start_time < duration_time:
+        running_time = time.time() - start_time
+        if running_time < duration_time:
+            os.system('cls')
+            print(char_video[int(running_time / duration_time * frame_number)])
+        time.sleep(1 / fps)
