@@ -2,7 +2,9 @@ import os
 import sys
 from common import bean, run
 
+
 base_dir = 'out'
+
 
 def start():
     # 如果没有参数
@@ -36,6 +38,7 @@ def start():
             if not (python_command is None):
                 bean.CommandBuilder.python_command = python_command
             run.run(target_path, args)
+
 
 if __name__ == '__main__':
     start()

@@ -2,7 +2,6 @@ from common import bean
 import sys, os, re
 
 
-
 def get_python_path():
     sys_path = os.environ['path'].split(';')
     pattern = "python[3]?(.exe)?$"

@@ -82,6 +82,6 @@ def run(target_path, args):
     mod = True
     if not (cls is None):
         cls = cls.lower()
-        if cls=='n' or cls=='no' or cls=='false':
+        if cls == 'n' or cls == 'no' or cls == 'false':
             mod = False
     video.play_char_video(char_video_info, audio_full_path, duration_time, fps=fps, cls=mod)

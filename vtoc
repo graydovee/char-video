@@ -9,6 +9,7 @@ sys.path.insert(1, os.path.join(_filepath, _srcdir))
 if sys.version_info[0] == 3:
     if __name__ == '__main__':
         main.start()
-else: # Python 2
+else:
+    # Python 2
     print("[fatal] Python 3 is required!")
     print("try to run this script using 'python3 you-get'.")
