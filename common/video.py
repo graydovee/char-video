@@ -1,7 +1,7 @@
 from common import bean
 import moviepy.editor as mp
 import cv2, playsound
-import sys, os, threading, time, hashlib, re
+import sys, os, time, hashlib, re
 
 
 max_height_size = 30
@@ -107,8 +107,7 @@ def make_char_video(video_full_path):
 
 def play_char_video(char_video, sound_file, duration_time, fps=15, cls=True):
     frame_number = len(char_video)
-    sound_thread = threading.Thread(target=playsound.playsound, args=(sound_file,))
-    sound_thread.start()
+    playsound.playsound(sound_file, block=False)
     start_time = time.time()
     while time.time() - start_time < duration_time:
         running_time = time.time() - start_time
@@ -117,4 +116,7 @@ def play_char_video(char_video, sound_file, duration_time, fps=15, cls=True):
                 os.system('cls')
             print(char_video[int(running_time / duration_time * frame_number)])
         time.sleep(1 / fps)
+
+    if cls:
+        os.system('cls')
     print("播放结束")
